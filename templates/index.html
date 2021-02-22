@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title>Search V1</title>
+		<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+		
+    </head>
+    <body>
+        <form action="/action_page" method = "POST">
+		<label for="fname">Select System to do search for:</label><br>
+		<select id="system" name="system">
+                        <option value="ntuc">NTUC</option>
+		</select><br>
+  		<label for="fname">Enter search:</label><br>
+  		<input type="text" id="fname" name="fname" value="" size = "100"><br> 
+  		
+		<input type="submit" value="Submit">
+
+	</form>
+
+      <form action = "/upload" method = "POST" 
+         <input type = "submit" value="Upload File">
+	<button type="submit">Upload Update File</button>
+
+      </form>
+      <form action = "/overwrite" method = "POST" 
+         <input type = "submit" value="Overwrite File">
+	<button type="submit">Overwrite DB</button>
+
+      </form>
+    </body>
+</html>	

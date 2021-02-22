@@ -1,0 +1,19 @@
+body            { font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+				 text-align:center;}
+a, h1, h2       { color: #377ba8; }
+h1, h2          { text-align:center; }
+h1              { border-bottom: 2px solid #eee; }
+h2              { font-size: 1.2em; }
+html, body {
+    height: 100%;
+}
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+    display: table-cell;
+    vertical-align: middle;
+}
