@@ -5,19 +5,19 @@ import numpy as np
 # Connect to the elastic cluster
 es2=Elasticsearch([{'host':'localhost','port':9200}])
 #load the data
-df = pd.read_excel("Intern.xlsx")
-hdf = df.drop_duplicates('IntentDesc')
-hdf["combine"] = hdf["IntentDesc"] +" "+ hdf["KBResponseText"]
+df = pd.read_csv("stockticker10-tweets(dataset 23-2-21).csv")
+#hdf = df.drop_duplicates('IntentDesc')
+#hdf["combine"] = hdf["IntentDesc"] +" "+ hdf["KBResponseText"]
 def index_data(df):
     for index, row in df.iterrows():
         #print(value)
         print(index)
         e = {
-                "intent":row["IntentDesc"],
+                "intent":row["Query"],
                 #"text": row["CategoryDesc"] + " " + row["IntentDesc"]+ " " + row["SubCategoryDesc"]
-                "text": row["combine"]
+                "text": row["Text"]
 
             }
-        es2.index(index =row["CampaignName"].lower(),doc_type= "miki",id =index,body = e)
-index_data(hdf)
+        es2.index(index = "first", doc_type= "word",id =index,body = e)
+index_data(df)
 print("data indexing complete")

@@ -61,7 +61,7 @@ def search(text, system):
     for hit in res['hits']['hits']:
         id = hit['_id']
         result_list.append(id)
-        intent = hit["_source"]["intent"]
+        intent = hit["_source"]["text"]
         intent_list.append(intent)
 #         print(intent)
 #         print("score: ",hit['_score'])
