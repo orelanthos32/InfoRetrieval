@@ -36,7 +36,7 @@ def text_query_to_csv(text_query,count):
         time.sleep(1)
 
 if __name__ == "__main__":
-    text_list = ['$GME','$FB','$GOOG','$AMC','$RKT','$PLTR','$TSLA','$AMZN','$UWMC','$AAPL']
+    text_list = ['$GME','$NVDA','$GOOG','$AMC','$RKT','$PLTR','$TSLA','$AMZN','$UWMC','$AAPL']
     count = 1000
     for text_query in text_list:
         text_query_to_csv(text_query, count)
