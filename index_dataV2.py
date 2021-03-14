@@ -5,7 +5,7 @@ import numpy as np
 # Connect to the elastic cluster
 es2=Elasticsearch([{'host':'localhost','port':9200}])
 #load the data
-df = pd.read_csv("stockticker10-tweets(dataset 23-2-21).csv")
+df = pd.read_csv("stockticker10-tweets(5-3-21).csv")
 #hdf = df.drop_duplicates('IntentDesc')
 #hdf["combine"] = hdf["IntentDesc"] +" "+ hdf["KBResponseText"]
 def index_data(df):
@@ -14,7 +14,6 @@ def index_data(df):
         print(index)
         e = {
                 "intent":row["Query"],
-                #"text": row["CategoryDesc"] + " " + row["IntentDesc"]+ " " + row["SubCategoryDesc"]
                 "text": row["Text"]
 
             }
