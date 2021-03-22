@@ -1,0 +1,63 @@
+
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <head>
+        <title>Stock Site Result</title>
+            <link rel="stylesheet" type="text/css" href="/static/style.css" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div class='diagrams'>
+        <canvas id="myChart"></canvas>
+        </div>
+        <div class='diagrams'>
+            <img src="data:image/png;base64,{{ urii }}" alt="" >
+        </div>
+       <!-- <p>{{ best2_data }}</p> -->
+    </body>
+
+    <script>
+
+    var best = "{{best_data}}";
+    var best2 = "{{ best2_data}}";
+    var ctx = document.getElementById('myChart').getContext('2d');
+    best = strToObj(best)
+    best2 = strToObj(best2)
+    //console.log(best);
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'bar',
+
+        // The data for our dataset
+        data: {
+            labels: best,
+            datasets: [{
+                label: 'My First dataset',
+                borderColor: 'rgb(255, 99, 132)',
+                data: best2,
+                fill:false,
+                backgroundColor:["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"],
+                borderColor:["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"],
+                borderWidth:1}]},
+
+        // Configuration options go here
+        options: {}
+    });
+
+    // From Python List to Javascript Obj
+    // From Python to html, the list will be trasnferred as String instead of List
+    // Therefore, Have to manipulate string
+    function strToObj(s)
+    {
+        s = s.replace(new RegExp("&"+ "#"+"x27;", "g"), "'");
+        s = s.slice(1,-1);
+        s = best.split(', ');
+        return s;
+    }
+
+
+    </script>
+</html>
+

@@ -1,0 +1,42 @@
+
+<html>
+    <head>
+        <title>Stock Site</title>
+            <link rel="stylesheet" type="text/css" href="/static/style.css" />
+    </head>
+    <body>
+        <body>
+            <form action="\app\homepage" method = "POST">
+            {% csrf_token %}
+            {{ form2 }}
+            </form>
+            <p>{{ source }}</p>
+        <div class = "center">
+            <form action="\app\homepage" method = "POST">
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit">Submit</button>
+            </form>
+            <form action="\app\results" method = "POST">
+            {% csrf_token %}
+            <button type="submit" name="resultbutton">Other Results</button>
+            </form>
+            <form action="\app\words" method = "POST">
+                {% csrf_token %}
+                <button type="submit" name="wordsbutton">Word Results</button>
+                </form>
+        </div>
+        
+        
+    </body>
+</html>
+
+<!--   
+    <div class="center">
+            <form action="/submit_page" method = "POST">
+                <label for="sname">Stock Search</label><br>
+                <input type="text" id="sname" name="sname" value=Submit text here>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    Just in case, to test<h1>hello</h1>-->

@@ -1,0 +1,19 @@
+
+<html>
+    <head>
+        <title>Stock Site</title>
+            <link rel="stylesheet" type="text/css" href="/static/style.css" />
+    </head>
+        <!-- top left corner: source choice (Put current source choide on top left))
+        Middle: Put serch button for queries
+        Configure nother button to look at standardised queries
+        -->
+        <div class = "center">
+            <form action="\app\homepage" method = "post">
+            {% csrf_token %}
+            {{ form }}
+            </form>
+        </div>
+        
+    </body>
+</html>
