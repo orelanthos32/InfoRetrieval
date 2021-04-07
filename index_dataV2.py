@@ -2,6 +2,7 @@
 from elasticsearch import Elasticsearch 
 import pandas as pd
 import numpy as np
+print("starting..")
 # Connect to the elastic cluster
 es2=Elasticsearch([{'host':'localhost','port':9200}])
 #load the data
