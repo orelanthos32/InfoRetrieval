@@ -1,0 +1,308 @@
+
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <head>
+        <title>Stock Site</title>
+            <link rel="stylesheet" type="text/css" href="/static/style.css" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+    <div class='site-title-w-back'> 
+        <div id= "button"><button class="backbutton" onclick="goBack()" ><b>&lt;</b></button></div>
+        <div id="header"> Stock Site</div>    
+    </div>
+
+
+    <div class='site-main-container' >
+        <div> 
+            <form action="\app\homepage" method = "POST" >
+            {% csrf_token %}
+            {{ form2 }}
+            </form> 
+        </div>
+        <div>
+            <form action="\app\comparison" method = "POST">
+                {% csrf_token %}
+                <button class='button-visual'>Stat Comparison</button>
+                </form>
+        </div>
+        <div> 
+            <form action="\app\sentimentanalysis" method = "POST">
+            {% csrf_token %}
+            <button class='button-visual'>Sentiment Analysis</button>
+            </form> </div>
+    </div>
+            
+            
+    <div class = "center home" >
+        <div id="form-content">
+        <form action="\app\homepage" method = "POST">
+            <fieldset style="border: 5px solid transparent;">
+                <legend><span style="text-transform: capitalize">{{ source }}</span> Query Search</legend>
+                <!--<p class='form-header'></p>-->
+                {% csrf_token %}
+                {{ form.searchtext }}
+                <button type="submit">Submit</button>
+            </fieldset>
+        </form>
+    
+
+        </div>
+    </div>
+
+    <div>    
+     <hr style="height:2px;border-width:0;color:gray;background-color:gray" />
+    </div>
+
+
+
+    <strong><p id='query'>Query Searched : <span>{{ query }}</span></p>
+        <div class='query-result-container'>
+            <table>
+                {{ result|safe }}
+            </table>
+        </div>
+
+        <div>    
+            <hr style="height:2px;border-width:0;color:gray;background-color:gray" />
+        </div>
+
+
+        <!-- Need to check if the below works 
+            Should display based on submit button
+            If it works, work on displaying diagram
+        
+        -->
+        <div style="margin-top: 30px;border-radius: 12px; background-color: rgba(252, 252, 252, 0.829);text-align: center;">
+            <span>More information:</span>
+            <div id="Twittercheckboxdiv" style="display:none; text-align:center">
+                <div class="some-class">
+                    <label  style="word-wrap:break-word"><input type="checkbox" id="twitter_topscore" onclick="showTwitterTopScore()" />Top Scores</label>
+                    <label  style="word-wrap:break-word"><input type="checkbox" id="twitter_queryanalysis" onclick="showTwitterQueryAnalysis()" />Sentiment Analysis</label>
+                </div>
+            </div>
+        
+            <div id="Redditcheckboxdiv" style="display:none; text-align:center">
+                <div class="some-class">
+                    <label  style="word-wrap:break-word"><input type="checkbox" id="reddit_topscore" onclick="showRedditTopScore()" />Top Scores</label>
+                    <label  style="word-wrap:break-word"><input type="checkbox" id="reddit_queryanalysis" onclick="showRedditQueryAnalysis()" />Sentiment Analysis</label>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="diagram-main-container">
+            <div id="homepage1" style="display:none; grid-column-start: 1;grid-column-end: -1">
+                <div class="table-findings-container"> Twitter Top Score Query
+                    <table style="width:100%">
+                        {{ twitterScore|safe }}
+                    </table>
+                </div>
+            </div>
+            <div id="homepage2" style="display:none; grid-column-start: 1;grid-column-end: -1">
+                <div class="table-findings-container"> Reddit Top Score Query
+                    <table>
+                        {{ redditScore|safe }}
+                    </table>
+                </div>
+            </div>
+            <div id="homepage3" style="display:none; grid-column-start: 1;grid-column-end: -1">Query Sentiment Analysis<canvas id="myChart"></canvas>
+                <p id="explanation">The queried information is leaning towards a <span id="emotion"></span> outlook!</p>
+            </div>
+            <div id="homepage4" style="display:none;grid-column-start: 1;grid-column-end: -1">Query Sentiment Analysis<canvas id="myChart8"></canvas>
+                <p id="explanation">The queried information is leaning towards a <span id="emotion2"></span> outlook!</p>
+            </div>
+        </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+    <script>
+        var twitter = "{{ twitterflag }}";
+        var reddit = "{{ redditflag }}";
+
+        var twitter1 = document.getElementById("Twittercheckboxdiv");
+        var reddit1 = document.getElementById("Redditcheckboxdiv");
+
+        if(twitter == "1"){
+            twitter1.style.display = "block";
+            reddit1.style.display = "none";
+            }
+        if(reddit == "1"){
+            twitter1.style.display = "none";
+            reddit1.style.display = "block";
+        }
+
+        function showTwitterTopScore(){
+            var checkbox = document.getElementById("twitter_topscore");
+            var text = document.getElementById("homepage1");
+            if(checkbox.checked == true){
+                text.style.display = "block";
+            }
+            else{
+                text.style.display = "none";
+            }
+        }
+
+        function showRedditTopScore(){
+            var checkbox = document.getElementById("reddit_topscore");
+            var text = document.getElementById("homepage2");
+            if(checkbox.checked == true){
+                text.style.display = "block";
+            }
+            else{
+                text.style.display = "none";
+            }
+        }
+
+        function showTwitterQueryAnalysis(){
+            var checkbox = document.getElementById("twitter_queryanalysis");
+            var text = document.getElementById("homepage3");
+            if(checkbox.checked == true){
+                text.style.display = "block";
+            }
+            else{
+                text.style.display = "none";
+            }
+        }
+
+        function showRedditQueryAnalysis(){
+            var checkbox = document.getElementById("reddit_queryanalysis");
+            var text = document.getElementById("homepage4");
+            if(checkbox.checked == true){
+                text.style.display = "block";
+            }
+            else{
+                text.style.display = "none";
+            }
+        }
+
+    </script>
+
+
+
+
+    <script>
+
+    var twitterVader = "{{twitterVader}}";
+    var ctx = document.getElementById('myChart').getContext('2d');
+    
+    twitterVader = strToObj(twitterVader);
+    
+    negativetwt = twitterVader[0];
+    neutraltwt = twitterVader[1];
+    positivetwt = twitterVader[2];
+
+
+    if (negativetwt >= neutraltwt && negativetwt >= positivetwt) {
+        document.getElementById("emotion").innerHTML = "NEGATIVE";
+        }
+    if (neutraltwt >= negativetwt && neutraltwt >= positivetwt) {
+        document.getElementById("emotion").innerHTML = "NEUTRAL";
+        } 
+    if(positivetwt >= negativetwt && positivetwt >= neutraltwt) {
+        document.getElementById("emotion").innerHTML = "POSTIIVE";
+        }
+    if(positivetwt == negativetwt && positivetwt == neutraltwt) {
+        document.getElementById("emotion").innerHTML = "EQUAL";
+        }
+
+    twitterDataVader = {
+            labels: [
+                'Negative',
+                'Neutral',
+                'Positive'
+            ],
+            datasets: [{
+                label: 'Twitter Query Dataset',
+                data: twitterVader,
+                backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)'
+                ]
+            }]
+            };
+    //console.log(best);
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'polarArea',
+
+        // The data for our dataset
+        data: twitterDataVader,
+
+        // Configuration options go here
+        options: {}
+    });
+
+
+
+
+    var redditVader = "{{redditVaders}}";
+    console.log(redditVader);
+    var ctx8 = document.getElementById('myChart8').getContext('2d');
+    
+    redditVader = strToObj(redditVader);
+
+    negativetwt = redditVader[0];
+    neutraltwt = redditVader[1];
+    positivetwt = redditVader[2];
+
+    if (negativetwt >= neutraltwt && negativetwt >= positivetwt) {
+        document.getElementById("emotion2").innerHTML = "NEGATIVE";
+        }
+    if (neutraltwt >= negativetwt && neutraltwt >= positivetwt) {
+        document.getElementById("emotion2").innerHTML = "NEUTRAL";
+        } 
+    if(positivetwt >= negativetwt && positivetwt >= neutraltwt) {
+        document.getElementById("emotion2").innerHTML = "POSTIIVE";
+        }
+    if(positivetwt == negativetwt && positivetwt == neutraltwt) {
+        document.getElementById("emotion2").innerHTML = "EQUAL";
+        }
+    
+    var chart8 = new Chart(ctx8, {
+        // The type of chart we want to create
+        type: 'polarArea',
+
+        // The data for our dataset
+        data: {
+            labels: [
+                "Negative",
+                "Neutral",
+                "Positive"
+            ],
+            datasets: [{
+                label: 'Reddit Query Dataset',
+                data: redditVader,
+                backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(255, 205, 86)',
+                'rgb(75, 192, 192)'
+                ]
+            }]
+            },
+
+        // Configuration options go here
+        options: {}
+    });
+
+    function strToObj(s)
+    {
+        s = s.replace(new RegExp("&"+ "#"+"x27;", "g"), "'");
+        s = s.slice(1,-1);
+        s = s.split(', ');
+        return s;
+    }
+
+
+    </script>
+
+
+    </body>
+</html>
