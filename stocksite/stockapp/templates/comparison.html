@@ -1,0 +1,383 @@
+
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <head>
+        <title>Stock Site Result</title>
+            <link rel="stylesheet" type="text/css" href="/static/style.css" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div class='site-title-w-back'> 
+            <div id= "button"><button class="backbutton" onclick="goBack()" ><b>&lt;</b></button></div>
+            <div id="header"> Stock Site</div>    
+        </div>
+        
+        <div style='display: block;height: 100px; text-align: center; font-size: 50px'>Stat Comparison</div>
+        <div style='display: block;height: 100px; text-align: center; font-size: 20px'>
+            <div class="some-class">
+                <label  style="word-wrap:break-word"><input type="checkbox" id="twitter-checkbox"  />Twitter</label>
+                <label  style="word-wrap:break-word"><input type="checkbox" id="reddit-checkbox"  />Reddit</label>
+            </div>
+
+            <div id="Twittercheckboxdiv" style="display:none">
+                <div class="some-class">
+                    <label  style="word-wrap:break-word"><input type="checkbox" id="favTweets" onclick="showFavTweets()" />Most Fav Tweets</label>
+                    <label  style="word-wrap:break-word"><input type="checkbox" id="rtTweets" onclick="showRTTweets()" />Most RT Tweets</label>
+                </div>
+            </div>
+
+            <div id="Redditcheckboxdiv" style="display:none">
+                <div class="some-class">
+                    <label  style="word-wrap:break-word"><input type="checkbox" id="RecentSales" onclick="recentSalesFunction()" />Recent Sales</label>
+                    <label  style="word-wrap:break-word"><input type="checkbox" id="NetChange" onclick="netChangeFunction()" />Net Sales</label>
+                    <label  style="word-wrap:break-word"><input type="checkbox" id="CurrVolume" onclick="currVolumeFunction()"  />Recent Volume</label>
+                </div>
+            </div>
+
+
+
+                
+                
+        </div>
+        
+        <div class="diagram-main-container">
+            <div id="recent" style="display:none">Recent Best Sales<canvas id="myChart"></canvas>
+                <p id="explanation">**Shows the recent best Stocks Sales<p>
+            </div>
+            <div id="recent2" style="display:none">Recent Worst Sales<canvas id="myChart2"></canvas>
+                <p id="explanation">**Shows the recent worst Stocks Sales<p>
+            </div>
+            <div id="recent3" style="display:none">Recent Best Net Change<canvas id="myChart3"></canvas>
+                <p id="explanation">**Shows the recent increase in Stocks Net Change<p>
+            </div>
+            <div id="recent4" style="display:none">Recent Worst Net Change<canvas id="myChart4"></canvas>
+                <p id="explanation">**Shows the recent decrease in Stocks Net Change<p>
+            </div>
+            <div id="recent7" style="display:none">Best Volume (Top 10)<canvas id="myChart5"></canvas>
+            <p id="explanation">**The higher the volume, the more reliable the stocks exchange are<p>
+            </div>
+            <div id="recent8" style="display:none">Worst Volume (Bottom 10)<canvas id="myChart6"></canvas>
+                <p id="explanation">**The lower the volume, the less reliable the stocks exhange are<p>
+            </div>
+            <div id="recent5" style="display:none; grid-column-start: 1;grid-column-end: -1">
+                <div class="table-findings-container">Most Favourite Tweets
+                    <table>
+                        {{ mostfavtwtTable|safe }}
+                    </table>
+                </div>
+                <p id="explanation">**These tweets regarding stocks were the top in favourites<p></p>
+            </div>
+            <div id="recent6" style="display:none;grid-column-start: 1;grid-column-end: -1">
+                <div class="table-findings-container" >Most Retweeted Tweets
+                    <table>
+                        {{ mostrttwtTable|safe }}
+                    </table>
+                </div>
+                <p id="explanation">**These tweets regarding stocks were retweeted the most<p></p>
+            </div>
+            <div id="recent9" style="display:none; grid-column-start: 1;grid-column-end: -1">
+                <div class="table-findings-container" style="margin-left:auto;margin-right:auto">Most Trusted Users on each stock in query
+                    <table >
+                        {{ twitterTrustedUsers|safe }}
+                    </table>
+                </div>
+                <p id="explanation">These usernames have the most reliable information on the following stocks, based on RT Counts<p></p>
+            </div>
+        </div>
+
+
+        <script>
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+
+        <script>
+            $('#twitter-checkbox').change(function(){
+                $('#Twittercheckboxdiv').toggle();
+            });
+            $('#reddit-checkbox').change(function(){
+                $('#Redditcheckboxdiv').toggle();
+            });
+
+        </script>
+
+        <script>
+
+        function showFavTweets(){
+            var checkbox = document.getElementById("favTweets");
+            var text = document.getElementById("recent5");
+            if(checkbox.checked == true){
+                text.style.display = "block";
+            }
+            else{
+                text.style.display = "none";
+            }
+        }
+
+        function showRTTweets(){
+            var checkbox = document.getElementById("rtTweets");
+            var text = document.getElementById("recent6");
+            var text2 = document.getElementById("recent9");
+            if(checkbox.checked == true){
+                text.style.display = "block";
+                text2.style.display = "block";
+            }
+            else{
+                text.style.display = "none";
+                text2.style.display = "none";
+            }
+        }
+        
+        function recentSalesFunction(){
+            var checkbox = document.getElementById("RecentSales");
+            var text = document.getElementById("recent");
+            var text2 = document.getElementById("recent2");
+            if(checkbox.checked == true){
+                text.style.display = "block";
+                text2.style.display = "block";
+            }
+            else{
+                text.style.display = "none";
+                text2.style.display = "none";
+            }
+            
+        }
+
+        function netChangeFunction(){
+            var checkbox = document.getElementById("NetChange");
+            var text = document.getElementById("recent3");
+            var text2 = document.getElementById("recent4");
+            if(checkbox.checked == true){
+                text.style.display = "block";
+                text2.style.display = "block";
+            }
+            else{
+                text.style.display = "none";
+                text2.style.display = "none";
+            }
+            
+        }
+
+        function currVolumeFunction(){
+            var checkbox = document.getElementById("CurrVolume");
+            var text = document.getElementById("recent7");
+            var text2 = document.getElementById("recent8");
+            if(checkbox.checked == true){
+                text.style.display = "block";
+                text2.style.display = "block";
+            }
+            else{
+                text.style.display = "none";
+                text2.style.display = "none";
+            }
+            
+        }
+
+        </script>
+        
+
+<!--
+        <div class='diagram-bg'>
+            <div class ='diagram-leftdiv'> 
+                <p>Recent Best Sales</p>
+                <canvas id="myChart"></canvas>
+             </div>
+            <div class='diagram-rightdiv'>
+                 <p>Right</p>
+            </div>
+        </div>
+
+    -->
+            
+
+       <!-- <p>{{ best2_data }}</p> -->
+    </body>
+
+    <script>
+
+    var best = "{{best_data}}";
+    var best2 = "{{ best2_data}}";
+    var ctx = document.getElementById('myChart').getContext('2d');
+    
+    best = strToObj(best);
+    best2 = strToObj(best2);
+    //console.log(best);
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'horizontalBar',
+
+        // The data for our dataset
+        data: {
+            labels: best,
+            datasets: [{
+                label: 'Reddit Dataset',
+                borderColor: 'rgb(255, 99, 132)',
+                data: best2,
+                fill:false,
+                backgroundColor:["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"],
+                borderColor:["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"],
+                borderWidth:1}]},
+
+        // Configuration options go here
+        options: {}
+    });
+
+    var worst = "{{worst_data}}";
+    var worst2 = "{{ worst2_data}}";
+    var ctx2 = document.getElementById('myChart2').getContext('2d');
+    
+    worst = strToObj(worst);
+    worst2 = strToObj(worst2);
+
+    var chart2 = new Chart(ctx2, {
+        // The type of chart we want to create
+        type: 'horizontalBar',
+
+        // The data for our dataset
+        data: {
+            labels: worst,
+            datasets: [{
+                label: 'Reddit Dataset',
+                borderColor: 'rgb(255, 99, 132)',
+                data: worst2,
+                fill:false,
+                backgroundColor:["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"],
+                borderColor:["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"],
+                borderWidth:1}]},
+
+        // Configuration options go here
+        options: {}
+    });
+
+    var bestnet = "{{bestnet_data}}";
+    var bestnet2 = "{{ bestnet2_data}}";
+    var ctx3 = document.getElementById('myChart3').getContext('2d');
+    
+    bestnet = strToObj(bestnet);
+    bestnet2 = strToObj(bestnet2);
+
+    var chart3 = new Chart(ctx3, {
+        // The type of chart we want to create
+        type: 'bar',
+
+        // The data for our dataset
+        data: {
+            labels: bestnet,
+            datasets: [{
+                label: 'Reddit Dataset',
+                borderColor: 'rgb(255, 99, 132)',
+                data: bestnet2,
+                fill:false,
+                backgroundColor:["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"],
+                borderColor:["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"],
+                borderWidth:1}]},
+
+        // Configuration options go here
+        options: {}
+    });
+
+    var worstnet = "{{worstnet_data}}";
+    var worstnet2 = "{{ worstnet2_data}}";
+    var ctx4 = document.getElementById('myChart4').getContext('2d');
+    
+    worstnet = strToObj(worstnet);
+    worstnet2 = strToObj(worstnet2);
+
+    var chart4 = new Chart(ctx4, {
+        // The type of chart we want to create
+        type: 'bar',
+
+        // The data for our dataset
+        data: {
+            labels: worstnet,
+            datasets: [{
+                label: 'Reddit Dataset',
+                borderColor: 'rgb(255, 99, 132)',
+                data: worstnet2,
+                fill:false,
+                backgroundColor:["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"],
+                borderColor:["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"],
+                borderWidth:1}]},
+
+        // Configuration options go here
+        options: {}
+    });
+
+    var bestvol = "{{bestvolterm}}";
+    var bestvol2 = "{{ bestvoldata}}";
+    var ctx5 = document.getElementById('myChart5').getContext('2d');
+    
+    bestvol = strToObj(bestvol);
+    bestvol2 = strToObj(bestvol2);
+
+    var chart5 = new Chart(ctx5, {
+        // The type of chart we want to create
+        type: 'line',
+
+        // The data for our dataset
+        data: {
+            labels: bestvol,
+            datasets: [{
+                label: 'Reddit Dataset',
+                data: bestvol2,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+            },
+
+        // Configuration options go here
+        options: {}
+    });
+
+
+    var worstvol = "{{worstvolterm}}";
+    var worstvol2 = "{{ worstvoldata}}";
+    var ctx6 = document.getElementById('myChart6').getContext('2d');
+    
+    worstvol = strToObj(worstvol);
+    worstvol2 = strToObj(worstvol2);
+
+    var chart6 = new Chart(ctx6, {
+        // The type of chart we want to create
+        type: 'line',
+
+        // The data for our dataset
+        data: {
+            labels: worstvol,
+            datasets: [{
+                label: 'Reddit Dataset',
+                data: worstvol2,
+                fill: false,
+                borderColor: 'rgb(220,20,60)',
+                tension: 0.1
+            }]
+            },
+
+        // Configuration options go here
+        options: {}
+    });
+    // From Python List to Javascript Obj
+    // From Python to html, the list will be trasnferred as String instead of List
+    // Therefore, Have to manipulate string
+
+    // Create another fucniton here to automate the rpocess of the bar visuaisation process
+
+    
+    
+
+    function strToObj(s)
+    {
+        s = s.replace(new RegExp("&"+ "#"+"x27;", "g"), "'");
+        s = s.slice(1,-1);
+        s = s.split(', ');
+        return s;
+    }
+
+
+    </script>
+</html>
+

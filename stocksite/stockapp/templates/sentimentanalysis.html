@@ -1,0 +1,251 @@
+
+<html>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <head>
+        <title>Stock Site Result</title>
+            <link rel="stylesheet" type="text/css" href="/static/style.css" />
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div class='site-title-w-back'> 
+            <div id= "button"><button class="backbutton" onclick="goBack()" ><b>&lt;</b></button></div>
+            <div id="header"> Stock Site</div>    
+        </div>
+        <div style='display: block;height: 100px; text-align: center; font-size: 50px'>Sentiment Analysis</s></div>
+        <div class="sentiment-main-container">
+            <div>Positive : {{ positive }}</div>
+            <div>Neutral : {{ neutral }}</div>
+            <div>Negative : {{ negative }}</div>
+        </div>
+
+        <div class="diagram-main-container">
+            <div>Dataset Subjectivity<canvas id="myChart"></canvas></div>
+            <div>Dataset Subjectivity 2<canvas id="myChart3"></canvas></div>
+            <div>Opinions vs Facts<canvas id="myChart2"></canvas></div>
+            <div>Opinions vs Facts 2<canvas id="myChart4"></canvas></div>
+            <div>Facts<canvas id="myChart5"></canvas></div>
+            <div>Opinions<canvas id="myChart6"></canvas></div>
+        </div>
+        
+
+    </body>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+
+    <script>
+
+        var countdata = "{{totalCountData}}";
+        var countdata2 = "{{ totalCountData2}}";
+        var ctx = document.getElementById('myChart').getContext('2d');
+        
+        countdata = strToObj(countdata);
+        countdata2 = strToObj(countdata2);
+        console.log(countdata);
+        console.log(countdata2);
+        //console.log(best);
+        var myDoughnutChart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'doughnut',
+    
+            // The data for our dataset
+            data: {
+                labels: countdata,
+                datasets: [{
+                    label: 'Twitter Dataset',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: countdata2,
+                    fill:false,
+                    backgroundColor:["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)"],
+                    borderColor:["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)"],
+                    borderWidth:1}]},
+    
+            // Configuration options go here
+            options: {}
+        });
+
+
+
+
+        var subLabels = "{{subLabels}}";
+        var subCounts = "{{ subCounts}}";
+        var ctx2 = document.getElementById('myChart2').getContext('2d');
+        
+        subLabels = strToObj(subLabels);
+        subCounts = strToObj(subCounts);
+        //console.log(best);
+        var myPieChart  = new Chart(ctx2, {
+            // The type of chart we want to create
+            type: 'pie',
+    
+            // The data for our dataset
+            data: {
+                labels: subLabels,
+                datasets: [{
+                    label: 'Twitter Dataset',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: subCounts,
+                    fill:false,
+                    backgroundColor:["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)"],
+                    borderColor:["rgb(255, 99, 132)","rgb(255, 159, 64)"],
+                    borderWidth:1}]},
+    
+            // Configuration options go here
+            options: {}
+        });    
+
+        var twitterdata = "{{twitter_data}}";
+        var redditdata = "{{ reddit_data}}";
+        var ctx3 = document.getElementById('myChart3').getContext('2d');
+        
+        twitterdata = strToObj(twitterdata);
+        redditdata = strToObj(redditdata);
+
+        datacom = {labels: ["Negative", "Neutral", "Positive"],
+                datasets: [{
+                    label: 'Twitter Dataset',
+                    data: twitterdata,
+                    fill: true,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    pointBackgroundColor: 'rgb(255, 99, 132)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(255, 99, 132)'
+                },{
+                    label: 'Reddit Dataset',
+                    data: redditdata,
+                    fill: true,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgb(54, 162, 235)',
+                    pointBackgroundColor: 'rgb(54, 162, 235)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(54, 162, 235)'
+                }]
+            };
+
+        var myRadarChart  = new Chart(ctx3, {
+            // The type of chart we want to create
+            type: 'radar',
+            // The data for our dataset
+            data: datacom,
+            // Configuration options go here
+            options: {}
+        });    
+
+        var factData = "{{factDatas}}";
+        var factLabels = "{{factLabels}}";
+        var opinionData = "{{ opinionDatas}}";
+        var ctx4 = document.getElementById('myChart4').getContext('2d');
+        
+        factData = strToObj(factData);
+        opinionData = strToObj(opinionData);
+        factLabels = strToObj(factLabels);
+        console.log(factData);
+        console.log(opinionData);
+
+        datacom2 = {labels: factLabels,
+                datasets: [{
+                    label: 'Facts',
+                    data: factData,
+                    fill: true,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    pointBackgroundColor: 'rgb(255, 99, 132)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(255, 99, 132)'
+                },{
+                    label: 'Opinions',
+                    data: opinionData,
+                    fill: true,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgb(54, 162, 235)',
+                    pointBackgroundColor: 'rgb(54, 162, 235)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(54, 162, 235)'
+                }]
+            };
+
+        var myRadarChart  = new Chart(ctx4, {
+            // The type of chart we want to create
+            type: 'radar',
+            // The data for our dataset
+            data: datacom2,
+            // Configuration options go here
+            options: {}
+        });    
+
+    var factsdata = "{{factDatas}}";
+    var factslabels = "{{ factLabels}}";
+    var ctx5 = document.getElementById('myChart5').getContext('2d');
+
+    // Facts only
+    factsdata = strToObj(factsdata);
+    factslabels = strToObj(factslabels);
+    //console.log(best);
+    var chart5 = new Chart(ctx5, {
+        // The type of chart we want to create
+        type: 'horizontalBar',
+
+        // The data for our dataset
+        data: {
+            labels: factslabels,
+            datasets: [{
+                label: 'Facts from Twitter and Reddit',
+                borderColor: 'rgb(255, 99, 132)',
+                data: factsdata,
+                fill:false,
+                backgroundColor:["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"],
+                borderColor:["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"],
+                borderWidth:1}]},
+
+        // Configuration options go here
+        options: {}
+    });
+
+    // Opinions only
+    var opinionslabels = "{{opinionLabels}}";
+    var opinionsdatas = "{{ opinionDatas}}";
+    var ctx6 = document.getElementById('myChart6').getContext('2d');
+    
+    opinionslabels = strToObj(opinionslabels);
+    opinionsdatas = strToObj(opinionsdatas);
+    //console.log(best);
+    var chart6 = new Chart(ctx6, {
+        // The type of chart we want to create
+        type: 'horizontalBar',
+
+        // The data for our dataset
+        data: {
+            labels: opinionslabels,
+            datasets: [{
+                label: 'Twitter Dataset',
+                borderColor: 'rgb(255, 99, 132)',
+                data: opinionsdatas,
+                fill:false,
+                backgroundColor:["rgba(255, 99, 132, 0.2)","rgba(255, 159, 64, 0.2)","rgba(255, 205, 86, 0.2)","rgba(75, 192, 192, 0.2)","rgba(54, 162, 235, 0.2)","rgba(153, 102, 255, 0.2)","rgba(201, 203, 207, 0.2)"],
+                borderColor:["rgb(255, 99, 132)","rgb(255, 159, 64)","rgb(255, 205, 86)","rgb(75, 192, 192)","rgb(54, 162, 235)","rgb(153, 102, 255)","rgb(201, 203, 207)"],
+                borderWidth:1}]},
+
+        // Configuration options go here
+        options: {}
+    });
+
+        function strToObj(s)
+        {
+            s = s.replace(new RegExp("&"+ "#"+"x27;", "g"), "'");
+            s = s.slice(1,-1);
+            s = s.split(', ');
+            return s;
+        }
+
+        </script>
+</html>
